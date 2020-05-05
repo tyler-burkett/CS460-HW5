@@ -1,27 +1,33 @@
+import torch
 import torch.nn as nn
-import torch.nn.functional as F
 
 class CNN(nn.Module):
     def __init__(self):
         super(CNN, self).__init__()
-        self.conv1 = nn.Conv2d(3, 6, 5, stride=5) #500x500x3 to 100x100x6
-        self.pool = nn.MaxPool2d(2, stride=2) #100x100x1 to 50x50x1
-        self.conv2 = nn.Conv2d(6, 12, 2, stride=2) #50x50x1 to 25x25x1
-        self.fc1 = nn.Linear(25*25*12, 3750)
-        self.fc2 = nn.Linear(3750, 1875)
-        self.fc3 = nn.Linear(1875, 375)
-        self.fc4 = nn.Linear(375, 75)
-        self.fc5 = nn.Linear(75, 15)
-        self.fc6 = nn.Linear(15, 2)
+        input = 3
+        self.conv1 = nn.Conv2d(3, 6, 5)
+        self.conv2 = nn.Conv2d(6, 12, 5)
+        self.conv3 = nn.Conv2d(12, 24, 5)
+        self.pool1 = nn.MaxPool2d(2, stride=1)
+        self.pool2 = nn.MaxPool2d(2, stride=1)
+        self.pool3 = nn.MaxPool2d(2, stride=1)
+        self.lin_layer_input_size = 85*85*24
+        self.fc1 = nn.Linear(self.lin_layer_input_size, 416)
+        self.fc2 = nn.Linear(416, 20)
+        self.fc3 = nn.Linear(20, 2)
+        nn.init.ones_(self.fc1.bias)
+        nn.init.normal_(self.fc1.weight)
+        nn.init.ones_(self.fc2.bias)
+        nn.init.normal_(self.fc2.weight)
+        nn.init.ones_(self.fc3.bias)
+        nn.init.normal_(self.fc3.weight)
 
     def forward(self, x):
-        x = self.pool(F.relu(self.conv1(x)))
-        x = F.relu(self.conv2(x))
-        x = x.view(-1, 25*25*12)
-        x = F.relu(self.fc1(x))
-        x = F.relu(self.fc2(x))
-        x = F.relu(self.fc3(x))
-        x = F.relu(self.fc4(x))
-        x = F.relu(self.fc5(x))
-        x = F.relu(self.fc6(x))
+        x = self.pool1(torch.relu(self.conv1(x)))
+        x = self.pool2(torch.relu(self.conv2(x)))
+        x = self.pool3(torch.relu(self.conv3(x)))
+        x = x.view(-1, self.lin_layer_input_size)
+        x = torch.relu(self.fc1(x))
+        x = torch.relu(self.fc2(x))
+        x = self.fc3(x)
         return x
