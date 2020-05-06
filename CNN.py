@@ -4,7 +4,6 @@ import torch.nn as nn
 class CNN(nn.Module):
     def __init__(self):
         super(CNN, self).__init__()
-        input = 3
         self.conv1 = nn.Conv2d(3, 6, 5)
         self.conv2 = nn.Conv2d(6, 12, 5)
         self.conv3 = nn.Conv2d(12, 24, 5)

@@ -23,16 +23,16 @@ if __name__ == "__main__":
     neural_net.to(device)
 
     loss_function = nn.CrossEntropyLoss()
-    optimizer = optim.Adagrad(neural_net.parameters())
+    optimizer = optim.Adam(neural_net.parameters())
 
     # Import Corgi images
     train_set = dataset.read_train_sets("./data/training_data", 100, ['pembroke', 'cardigan'], 0)
     test_set = dataset.read_train_sets("./data/testing_data", 100, ['pembroke', 'cardigan'], 0)
 
-    train_set.train._images = train_set.train._images[:50]
-    train_set.train._labels = train_set.train._labels[:50]
+    train_set.train._images = train_set.train._images[:20]
+    train_set.train._labels = train_set.train._labels[:20]
     neural_net.train()
-    for epoch in range(100):  # loop over the dataset multiple times
+    for epoch in range(20):  # loop over the dataset multiple times
         running_loss = 0.0
         for i, data in enumerate(zip(train_set.train.images(), train_set.train.labels()), 0):
             # get the inputs and label
