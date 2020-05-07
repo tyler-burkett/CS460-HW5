@@ -14,12 +14,6 @@ class CNN(nn.Module):
         self.fc1 = nn.Linear(self.lin_layer_input_size, 416)
         self.fc2 = nn.Linear(416, 20)
         self.fc3 = nn.Linear(20, 2)
-        nn.init.ones_(self.fc1.bias)
-        nn.init.normal_(self.fc1.weight)
-        nn.init.ones_(self.fc2.bias)
-        nn.init.normal_(self.fc2.weight)
-        nn.init.ones_(self.fc3.bias)
-        nn.init.normal_(self.fc3.weight)
 
     def forward(self, x):
         x = self.pool1(torch.relu(self.conv1(x)))

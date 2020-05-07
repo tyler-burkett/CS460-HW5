@@ -29,8 +29,7 @@ if __name__ == "__main__":
     train_set = dataset.read_train_sets("./data/training_data", 100, ['pembroke', 'cardigan'], 0)
     test_set = dataset.read_train_sets("./data/testing_data", 100, ['pembroke', 'cardigan'], 0)
 
-    train_set.train._images = train_set.train._images[:20]
-    train_set.train._labels = train_set.train._labels[:20]
+    # Train the network
     neural_net.train()
     for epoch in range(20):  # loop over the dataset multiple times
         running_loss = 0.0
@@ -56,8 +55,8 @@ if __name__ == "__main__":
         if running_loss / len(train_set.train._images) < 0.001:
             break
 
+    # Test the network
     corgi_names = ['pembroke', 'cardigan']
-
     total = len(test_set.train._images)
     correct = 0
     neural_net.eval()
